@@ -1,0 +1,100 @@
+﻿@{
+    Layout = "~/Views/Company/JQueryDataTableEditableLayout.cshtml";
+}
+
+@section head{
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $('#myDataTable')
+        .dataTable({ "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": 'AjaxDataProvider',
+            "sPagination": "full_numbers",
+            "aoColumns": [
+                { "sName": "ID",
+                    "bSearchable": false,
+                    "bSortable": false,
+                    "bVisible": false
+                },
+                { "sName": "COMPANY_NAME", sTitle: "My JEditable Table" },
+		        { "sName": "ADDRESS" },
+		        { "sName": "TOWN" }
+		    ]
+        }).makeEditable({
+            aoColumns: [
+                    {},
+                    {},
+                    {
+                        data: getTownList(),
+                        type: "select",
+                        submit: "OK"
+                    }
+                    ]
+        });
+    });
+    function getTownList() {
+        $.post('getTownList', {},
+            function (data) {
+                getTownList = validateJSON(data);
+            },
+            'json/javascript'
+        );
+        return getTownList;
+    }
+
+    function validateJSON(x) {
+        var orig = x;
+        var stgify = JSON.stringify(orig);
+        var splitchar = ['\\"', '\',\'', '[', ']', '\"'];
+        var joinchar = ['\'', '\':\'', '', '', ''];
+
+        for (i = 0; i < 5; i++) {
+            stgify = stgify.split(splitchar[i]);
+            tmp = stgify.join(joinchar[i]);
+            stgify = tmp;
+        }
+        stgify = "{" + stgify + "}";
+        var finalEdit = stgify;
+        return finalEdit;
+    }
+</script>
+}
+
+
+<div id="demo">
+    <h2>Ajax example</h2>
+    <button id="btnAddNewRow" value="Ok">Add new company...</button> 
+    <button id="btnDeleteRow" value="cancel">Delete selected company</button>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Company name</th>
+                <th>Address</th>
+                <th>Town</th>
+            </tr>
+        </thead>
+        <tbody> 
+        </tbody>
+    </table>
+</div>
+
+<form id="formAddNewRow" action="#" title="Add new company">
+    <input type="hidden" id="id" name="id" value="-1" rel="0" />
+    <label for="name">Name</label><input type="text" name="name" id="name" class="required" rel="1" />
+    <br />
+    <label for="name">Address</label><input type="text" name="address" id="address" rel="2" />
+    <br />
+    <label for="name">Postcode</label><input type="text" name="postcode" id="postcode"/>
+    <br />
+    <label for="name">Town</label><input type="text" name="town" id="town" rel="3"/>
+    <br />
+    <label for="name">Country</label><select name="country" id="country">
+                                        <option value="1">Serbia</option>
+                                        <option value="2">France</option>
+                                        <option value="3">Italy</option>
+                                        </select>   
+    <br />         
+</form>
+

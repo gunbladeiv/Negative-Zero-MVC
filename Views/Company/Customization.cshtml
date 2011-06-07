@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "Customization";
+    Layout = "~/Views/Company/JQueryDataTableEditableLayout.cshtml";
+}
+
+@section head{
+
+        <script src="@Url.Content("~/Content/jAlert/jquery.alerts.js")" type="text/javascript"></script>
+        <link href="@Url.Content("~/Content/jAlert/jquery.alerts.css")" rel="stylesheet" type="text/css" />
+
+        <script language="javascript" type="text/javascript">
+
+            $(document).ready(function () {
+                $('#myDataTable').dataTable({
+                    "bJQueryUI": true,
+                    "sPaginationType": "full_numbers"
+                }).makeEditable({
+                    sUpdateURL: "/Company/UpdateData",
+                    sAddURL: "/Company/AddData",
+                    sDeleteURL: "/Company/DeleteData",
+
+                    sAddNewRowFormId: "formAddNewCompany",
+                    sAddNewRowButtonId: "btnAddNewCompany",
+                    sAddNewRowOkButtonId: "btnAddNewCompanyOk",
+                    sAddNewRowCancelButtonId: "btnAddNewCompanyCancel",
+                    sDeleteRowButtonId: "btnDeleteCompany",
+
+                    fnShowError: function (message, action) {
+                        switch (action) {
+                            case "update":
+                                jAlert(message, "Update failed");
+                                break;
+                            case "delete":
+                                jAlert(message, "Delete failed");
+                                break;
+                            case "add":
+                                $("#lblAddError").html(message);
+                                $("#lblAddError").show();
+                                break;
+                        }
+                    },
+                    fnStartProcessingMode: function () {
+                        $("#processing_message").dialog();
+                    },
+                    fnEndProcessingMode: function () {
+                        $("#processing_message").dialog("close");
+                    }
+                });
+            });
+        
+        </script>
+}
+
+
+<div id="demo">
+<h2>Customization</h2>
+
+<table id="myDataTable" class="display">
+                    <thead>
+                        <tr>
+                            <th>Company name</th>
+                            <th>Address</th>
+                            <th>Town</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                        @foreach (var item in Model) {
+                        <tr id="@item.ID">
+                            <td>@item.Name</td>
+                            <td>@item.Address</td>
+                            <td>@item.Town</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+
+
+        <button id="btnAddNewCompany" value="Ok">Add new company...</button> 
+        <button id="btnDeleteCompany" value="cancel">Delete selected company</button>
+
+</div>
+    
+<div id="processing_message" style="display:none" title="Processing">Please wait while your request is being processed...</div>
+
+
+        <form id="formAddNewCompany" action="#" title="Add new company">
+            <!-- button id="btnAddNewCompanyOk" value="Ok">Add Company</button>
+            <button id="btnAddNewCompanyCancel" value="cancel">Cancel</button -->
+            <label id="lblAddError" class="error"></label>
+            <br />
+            <label for="name">Name</label><input type="text" name="name" id="name" class="required" rel="0" />
+            <br />
+            <label for="name">Address</label><input type="text" name="address" id="address" rel="1" />
+            <br />
+            <label for="name">Postcode</label><input type="text" name="postcode" id="postcode"/>
+            <br />
+            <label for="name">Town</label><input type="text" name="town" id="town" rel="2" />
+            <br />
+            <label for="name">Country</label><select name="country" id="country">
+                                                <option value="1">Serbia</option>
+                                                <option value="2">France</option>
+                                                <option value="3">Italy</option>
+                                             </select>
+                                             <br />
+        </form>
+

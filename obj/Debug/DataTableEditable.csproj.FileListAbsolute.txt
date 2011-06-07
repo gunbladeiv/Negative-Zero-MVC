@@ -1,0 +1,5 @@
+E:\datumcorp\WP datum\DataTableEditable\bin\DataTableEditable.dll
+E:\datumcorp\WP datum\DataTableEditable\bin\DataTableEditable.pdb
+E:\datumcorp\WP datum\DataTableEditable\obj\Debug\ResolveAssemblyReference.cache
+E:\datumcorp\WP datum\DataTableEditable\obj\Debug\DataTableEditable.dll
+E:\datumcorp\WP datum\DataTableEditable\obj\Debug\DataTableEditable.pdb
